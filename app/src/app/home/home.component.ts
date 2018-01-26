@@ -10,21 +10,16 @@ import { AngularFireList } from 'angularfire2/database';
 })
 export class HomeComponent implements OnInit {
 public listings:Listing[]=[];
-  constructor(private fireBaseService:FireBaseService) {
+  constructor(public fireBaseService:FireBaseService) {
     
    }
 
   ngOnInit() {
-    //this.signin();
-    /*this.fireBaseService.getData().valueChanges().subscribe((data:Listing[])=>{
-      this.listings=data;
-      console.log(this.listings);
-    })
-    */
   }
+
   signin(){
-    this.fireBaseService.signInWithGoogle().then(function(data){
-     console.log(data);
+    this.fireBaseService.signInWithGoogle().then(function(){
+      this.fireBaseService.getData();
     });
     }
 

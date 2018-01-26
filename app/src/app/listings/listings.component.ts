@@ -12,11 +12,12 @@ export class ListingsComponent implements OnInit {
   constructor(private fireBaseService:FireBaseService) { 
   }
 
+
   ngOnInit() {
-    this.fireBaseService.getData().valueChanges().subscribe((data:Listing[])=>{
+    this.fireBaseService.getData().subscribe((data)=>{
       this.listings=data;
-      console.log(this.listings);
-    })
+      this.fireBaseService.listData=data;
+    });
   }
 
 }

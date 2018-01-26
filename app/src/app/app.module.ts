@@ -1,5 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import {FormsModule} from '@angular/forms';
 import {RouterModule,Routes} from '@angular/router';
 import {AngularFireModule} from 'angularfire2';
 import { AngularFireDatabaseModule, } from 'angularfire2/database';
@@ -15,10 +16,14 @@ import { AddListingComponent } from './add-listing/add-listing.component';
 import { EditListingComponent } from './edit-listing/edit-listing.component';
 import { NavbarComponent } from './navbar/navbar.component';
 
+import { DropdowndirectiveDirective } from './common/dropdowndirective.directive';
+
 const routes:Routes=[
   {path:'',component:HomeComponent },
   {path:'listings',component:ListingsComponent },
+  {path:'listings/:id',component:ListingComponent },
   {path:'addListings',component:AddListingComponent },
+  {path:'profile',component:ListingComponent}
 ]
 
 
@@ -40,13 +45,15 @@ const routes:Routes=[
     ListingsComponent,
     AddListingComponent,
     EditListingComponent,
-    NavbarComponent
+    NavbarComponent,
+    DropdowndirectiveDirective
   ],
   imports: [
     BrowserModule,
     RouterModule.forRoot(routes),
     AngularFireModule.initializeApp(config,'angular-auth-firebase'),
     AngularFireDatabaseModule,
+    FormsModule,
     AngularFireAuthModule
     
   ],

@@ -9,15 +9,15 @@ import {FireBaseService,Listing} from '../services/fire-base-service.service';
 })
 export class NavbarComponent implements OnInit {
 
-  
-  constructor(private fireBaseService:FireBaseService) { }
-private isLoggedIn:boolean;
+  public userDetail?:any=this.fireBaseService.userDetails;
+constructor(private fireBaseService:FireBaseService) { }
+
   ngOnInit() {
-    console.log(this.fireBaseService.isLoggedIn());
   }
 
   signin(){
   this.fireBaseService.signInWithGoogle();
+  
   }
 
   signout(){

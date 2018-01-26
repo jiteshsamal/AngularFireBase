@@ -7,28 +7,52 @@ import {ActivatedRoute,Router} from '@angular/router'
 
 @Injectable()
 export class FireBaseService {
-  private user: Observable<firebase.User>;
-  private userDetails: firebase.User = null;
-  constructor(private af:AngularFireDatabase,private _firebaseAuth: AngularFireAuth,private activatedRoute:ActivatedRoute,private router:Router) { 
-        this.user = _firebaseAuth.authState;
+  public user: Observable<firebase.User>;
+  public userDetails: firebase.User;
+  public listings:Observable<Listing[]>;
+  public listData:Listing[]
+  constructor(private af:AngularFireDatabase,private _firebaseAuth: AngularFireAuth,
+              private activatedRoute:ActivatedRoute,private router:Router) { 
+              this.user = _firebaseAuth.authState;
+              this.user.subscribe(
+                (user) => {
+                  if (user) {
+                    this.userDetails = user;
+                  }
+                  else {
+                    this.userDetails = null;
+                  }
+                }
+              );
+
+
     }
 
 
    getData(){
-    return this.af.list<Listing>('listings')
+      return this.af.list<Listing>('listings').valueChanges()
+     
+   }
+
+
+   getListings(){
+     return this.listData;
+   }
+
+   getListingById(id){
+     return this.listData.find(
+       function(item){
+         if(item.id==id)
+         return true;
+         else 
+         return false;
+     })
    }
      
    signInWithGoogle() {
     return this._firebaseAuth.auth.signInWithPopup(
       new firebase.auth.GoogleAuthProvider()
-    ).then((data)=>{
-      this.userDetails=data;
-    })
-
-}
-
-ngOninit(){
- 
+    );
 }
 
 isLoggedIn() {
@@ -40,11 +64,8 @@ isLoggedIn() {
   }
   
 logout() {
-  debugger;
     this._firebaseAuth.auth.signOut()
-    .then((res) => 
-    {
-      debugger;
+    .then((res) => {
     this.userDetails=null;
     this.router.navigate(['/'])
   }).catch(function(error){
@@ -53,10 +74,15 @@ logout() {
   }
 
 
+
+
+
+
 }
 
 
 export  interface Listing{
+  id?:number
   $key?:string
   bedrooms? : string,
   city? : string,
