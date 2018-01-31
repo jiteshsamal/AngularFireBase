@@ -4,14 +4,16 @@ import { AngularFireAuth } from 'angularfire2/auth';
 import { Observable } from 'rxjs/Observable';
 import * as firebase from 'firebase/app';
 import {ActivatedRoute,Router} from '@angular/router'
+import { HttpClient } from '@angular/common/http';
 
 @Injectable()
 export class FireBaseService {
   public user: Observable<firebase.User>;
   public userDetails: firebase.User;
-  public listings:Observable<Listing[]>;
+  public listingDetauils:Observable<any[]>;
+  public listItemref:AngularFireList<any>;
   public listData:Listing[]
-  constructor(private af:AngularFireDatabase,private _firebaseAuth: AngularFireAuth,
+  constructor(private af:AngularFireDatabase,private _firebaseAuth: AngularFireAuth,private httpClient:HttpClient,
               private activatedRoute:ActivatedRoute,private router:Router) { 
               this.user = _firebaseAuth.authState;
               this.user.subscribe(
@@ -24,29 +26,26 @@ export class FireBaseService {
                   }
                 }
               );
-
-
+              this.listItemref = this.af.list('listings');
     }
 
 
    getData(){
-      return this.af.list<Listing>('listings').valueChanges()
-     
+       this.listingDetauils= this.listItemref.valueChanges();
+       return this.listingDetauils;
    }
 
 
    getListings(){
-     return this.listData;
+     //return this.listData;
+     return this.httpClient.get('https://ang-firebase-ed833.firebaseio.com/listings.json')
    }
 
-   getListingById(id){
-     return this.listData.find(
-       function(item){
-         if(item.id==id)
-         return true;
-         else 
-         return false;
-     })
+  
+
+   getSingleListing(key){
+     return this.httpClient.get('https://ang-firebase-ed833.firebaseio.com/listings/-Kdl_wRRkn7nJxgz4B54.json').toPromise();
+    
    }
      
    signInWithGoogle() {
@@ -82,7 +81,6 @@ logout() {
 
 
 export  interface Listing{
-  id?:number
   $key?:string
   bedrooms? : string,
   city? : string,

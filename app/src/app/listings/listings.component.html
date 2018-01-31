@@ -1,6 +1,8 @@
 <ul class="list-group">
-  <a [routerLink]="[item.id]" class="list-group-item" *ngFor="let item of listings">
-    {{item.title}}
+  <a [routerLink]="[item.title]" class="list-group-item" *ngFor="let item of listings|async">
+    {{item.title}} {{item.$key}}
     <span class="badge"> {{item.price}}</span>
   </a>
 </ul>
+
+

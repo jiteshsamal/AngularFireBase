@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {FireBaseService,Listing} from '../services/fire-base-service.service';
+import { Observable } from 'rxjs/Observable';
 
 @Component({
   selector: 'app-listings',
@@ -8,16 +9,13 @@ import {FireBaseService,Listing} from '../services/fire-base-service.service';
 })
 export class ListingsComponent implements OnInit {
 
-  public listings:Listing[]=[];
+  public listings:any;
   constructor(private fireBaseService:FireBaseService) { 
   }
 
 
   ngOnInit() {
-    this.fireBaseService.getData().subscribe((data)=>{
-      this.listings=data;
-      this.fireBaseService.listData=data;
-    });
+    this.listings=this.fireBaseService.getData();
   }
 
 }
