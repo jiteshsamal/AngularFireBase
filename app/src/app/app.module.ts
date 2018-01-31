@@ -6,6 +6,7 @@ import {AngularFireModule} from 'angularfire2';
 import { AngularFireDatabaseModule, } from 'angularfire2/database';
 import {AngularFireAuthModule} from 'angularfire2/auth';
 import {FireBaseService} from '../app/services/fire-base-service.service';
+import { HttpClientModule } from '@angular/common/http';
 
 
 import { AppComponent } from './app.component';
@@ -15,13 +16,14 @@ import { ListingsComponent } from './listings/listings.component';
 import { AddListingComponent } from './add-listing/add-listing.component';
 import { EditListingComponent } from './edit-listing/edit-listing.component';
 import { NavbarComponent } from './navbar/navbar.component';
+import { Listingresolver } from '../app/services/Listingresolver.service';
 
 import { DropdowndirectiveDirective } from './common/dropdowndirective.directive';
 
 const routes:Routes=[
   {path:'',component:HomeComponent },
   {path:'listings',component:ListingsComponent },
-  {path:'listings/:id',component:ListingComponent },
+  {path:'listings/:id',component:ListingComponent,resolve: { myData:Listingresolver} },
   {path:'addListings',component:AddListingComponent },
   {path:'profile',component:ListingComponent}
 ]
@@ -54,10 +56,11 @@ const routes:Routes=[
     AngularFireModule.initializeApp(config,'angular-auth-firebase'),
     AngularFireDatabaseModule,
     FormsModule,
-    AngularFireAuthModule
+    AngularFireAuthModule,
+    HttpClientModule
     
   ],
-  providers: [FireBaseService],
+  providers: [FireBaseService,Listingresolver],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
